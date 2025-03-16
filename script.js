@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imageInput.click();
     });
 
-    promptSelector.addEventListener("change", (e) => {
+    promptSelector.addEventListener("", (e) => {
         let selectedPrompt = e.target.value;
         if (selectedPrompt) {
             handleUserMessage(selectedPrompt);
