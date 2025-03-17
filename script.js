@@ -6,9 +6,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const imageElement = document.querySelector("#image img");
     const imageInput = document.querySelector("#image input");
     const promptSelector = document.querySelector("#promptSelector");
-    const roleSelector = document.querySelector("#role"); // Role Selector
+    const roleSelector = document.querySelector("#role");
 
+    // Create and add language selector to the UI
+    const languageSelectorHtml = `
+        <select id="language" class="language-selector">
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="es">Español (Spanish)</option>
+            <option value="fr">Français (French)</option>
+            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+        </select>
+    `;
+    
+    // Insert language selector after role selector if it exists
+    if (roleSelector && roleSelector.parentNode) {
+        const languageDiv = document.createElement('div');
+        languageDiv.innerHTML = languageSelectorHtml;
+        roleSelector.parentNode.insertBefore(languageDiv.firstChild, roleSelector.nextSibling);
+    }
+    
+    const languageSelector = document.querySelector("#language");
     const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyD62vTZtAlmumzqslwBYgrbzWW5WrE1k58";
+
+    // Language configurations - kept minimal for performance
+    const languages = {
+        "en": "English",
+        "hi": "Hindi",
+        "es": "Spanish", 
+        "fr": "French",
+        "kn": "Kannada"
+    };
 
     let userMessage = {
         text: null,
@@ -49,9 +77,20 @@ document.addEventListener("DOMContentLoaded", () => {
     async function generateResponse(aiChatBox) {
         let textElement = aiChatBox.querySelector(".ai-chat-area");
         let { rolePrefix, persona } = getRolePersona(userMessage.text);
-
+        
+        // Get selected language
+        const selectedLang = languageSelector ? languageSelector.value : "en";
+        const langName = languages[selectedLang] || "English";
+        
+        // Add language instruction to the prompt
+        const languageInstruction = `Please respond in ${langName} language: `;
+        
         let requestBody = {
-            contents: [{ parts: [{ text: rolePrefix + userMessage.text }] }],
+            contents: [{ 
+                parts: [{ 
+                    text: languageInstruction + rolePrefix + userMessage.text 
+                }] 
+            }],
         };
 
         if (userMessage.image) {
@@ -66,8 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             let data = await response.json();
-            let apiResponse =
-                data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "No response received.";
+            let apiResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "No response received.";
 
             // Introduce as BMSIT Assistant if user asks "Who are you?"
             if (/who\s*are\s*you/i.test(userMessage.text)) {
@@ -156,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imageInput.click();
     });
 
-    promptSelector.addEventListener("", (e) => {
+    promptSelector.addEventListener("change", (e) => {
         let selectedPrompt = e.target.value;
         if (selectedPrompt) {
             handleUserMessage(selectedPrompt);
