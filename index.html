@@ -3,23 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot</title>
-    <link rel="stylesheet" href="style.css">
+    <title>AI Chatbot for BMSIT</title>
     <style>
-        /* Custom styles for the role selector only */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2d3139;
+            color: #f0f0f0;
+        }
+
+        /* Role selector with dark theme */
         .role-selector {
-            background-color: #f0f2f5;
+            background-color: #343a46;
             padding: 12px 16px;
             margin-bottom: 16px;
             display: flex;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
         }
         
         .role-selector label {
-            font-weight: 600;
+            font-weight: 500;
             margin-right: 12px;
-            color: #444;
+            color: #e0e0e0;
             font-size: 14px;
         }
         
@@ -27,35 +34,236 @@
             flex: 1;
             padding: 10px 12px;
             border-radius: 6px;
-            border: 1px solid #d1d5db;
-            background-color: white;
+            border: 1px solid #444a54;
+            background-color: #222730;
+            color: #e0e0e0;
             font-size: 14px;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 10px center;
             padding-right: 30px;
             cursor: pointer;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
         
         .role-selector select:focus {
             outline: none;
             border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
         }
-        
-        .role-selector select:hover {
-            border-color: #9ca3af;
+
+        /* Language selector */
+        .language-selector {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #444a54;
+            background-color: #222730;
+            color: #e0e0e0;
+            font-size: 14px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
+            cursor: pointer;
+            margin-left: 10px;
         }
-        
-        .role-selector select option {
+
+        /* Chat container styling */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding: 10px 20px;
+        }
+
+        .ai-chat-box {
+            display: flex;
+            align-items: flex-start;
             padding: 10px;
+            margin-bottom: 12px;
+            background-color: #343a46;
+            border-radius: 12px;
+        }
+
+        .ai-chat-box img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .ai-chat-area {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .user-chat-box {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            margin-bottom: 12px;
+            background-color: #222730;
+            border-radius: 12px;
+            align-self: flex-end;
+            max-width: 80%;
+        }
+
+        .user-chat-area {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        /* ChatGPT-style input area */
+        .prompt-area-container {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            padding: 0 20px;
+        }
+
+        .prompt-area {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background-color: #222730;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid #444a54;
+        }
+
+        .prompt-area input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            padding: 8px 0;
+            background-color: transparent;
+            color: #f0f0f0;
+        }
+
+        .prompt-area input::placeholder {
+            color: #8e9297;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #8e9297;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: #343a46;
+            color: #ffffff;
+        }
+
+        .action-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .submit-button {
+            background: none;
+            border: none;
+            color: #8e9297;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .submit-button:hover {
+            color: #ffffff;
+        }
+
+        /* File upload area */
+        .uploaded-files {
+            margin: 0 20px;
+            padding: 0;
+            display: none;
+        }
+
+        .uploaded-files.active {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            background-color: #343a46;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .uploaded-file .file-icon {
+            color: #4f46e5;
+            margin-right: 8px;
+        }
+
+        .uploaded-file .file-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #e0e0e0;
+        }
+
+        .uploaded-file .remove-file {
+            cursor: pointer;
+            color: #8e9297;
+            padding: 4px;
+        }
+        
+        /* Loading icon */
+        .loading-icon {
+            display: block;
+            margin: 10px auto;
+            width: 50px;
+            height: auto;
+        }
+        
+        /* Selected image preview */
+        .selected {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        
+        .chooseimg {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <!-- Role Selector -->
+    <!-- Role and Language Selectors -->
     <div class="role-selector">
         <label for="role">Choose Assistant Role:</label>
         <select id="role">
@@ -63,43 +271,66 @@
             <option value="research">📚 Research Assistant</option>
             <option value="programming">💻 Programming Doubt Solver</option>
             <option value="kcet">🎓 KCET Advisor</option>
-            <option value="college">🏫 College Queries & Support</option>
+            <option value="college">🏫 College Queries &amp; Support</option>
+        </select>
+        <select id="language" class="language-selector">
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="es">Español (Spanish)</option>
+            <option value="fr">Français (French)</option>
+            <option value="kn">ಕನ್ನಡ (Kannada)</option>
         </select>
     </div>
     
     <div class="chat-container">
         <div class="ai-chat-box">
-            <img src="ai.png" alt="AI Avatar" id="aiImage" width="10%">
+            <img src="ai.png" alt="AI Avatar" id="aiImage">
             <div class="ai-chat-area">
-                Hello! How can I help you today?
+                Hi there! 👋 I'm your BMSIT AI assistant. How can I help you today?
             </div>
         </div>
     </div>
     
-    <div class="prompt-area">
-        <input type="text" id="prompt" placeholder="Message...">
-        <button id="image">
-            <img src="img.svg" alt="Upload Image">
-            <input type="file" accept="image/*" hidden>
-        </button>
-        <button id="submit">
-            <img src="submit.svg" alt="Send">
-        </button>
+    <!-- Uploaded Files Area -->
+    <div class="uploaded-files" id="uploadedFiles">
+        <!-- Files will be added here dynamically -->
     </div>
     
-    <select id="promptSelector">
-        <option value="">-- Select a Prompt --</option>
-        <option value="Show me my upcoming exam schedule">📅 Exam Schedule</option>
-        <option value="Provide notes for my Computer Networks subject">📖 Lecture Notes</option>
-        <option value="Give me details about upcoming college events">🎉 College Events</option>
-        <option value="What are the deadlines for assignments this week?">📌 Assignment Deadlines</option>
-        <option value="Can you help clarify a doubt in my Python programming course?">🤖 Python Doubt</option>
-    </select>
-    
-    <!-- TensorFlow.js and Universal Sentence Encoder -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
-    
+    <!-- ChatGPT-style Input Area -->
+    <div class="prompt-area-container">
+        <div class="uploaded-files" id="uploadedPDFs"></div>
+        <div class="prompt-area">
+            <input type="text" id="prompt" placeholder="Ask anything">
+            <div class="action-buttons">
+                <button class="action-button" id="pdfUpload">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v6m0 0l-4-4m4 4l4-4"/>
+                        <rect x="2" y="14" width="20" height="8" rx="2"/>
+                        <path d="M6 18h.01M10 18h8"/>
+                    </svg>
+                    <input type="file" id="pdfInput" accept="application/pdf" hidden>
+                </button>
+                <button class="action-button" id="imageUpload">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <input type="file" id="imageInput" accept="image/*" hidden>
+                </button>
+                <button class="submit-button" id="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 14l11-9-9 18-2-9-9-2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Required libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
