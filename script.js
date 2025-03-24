@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Add notification to chat
             let aiHtml = `
-                <img src="ai.png" alt="AI" width="10%">
+               
                 <div class="ai-chat-area">
                     📄 <b>PDF uploaded:</b> "${file.name}" has been successfully loaded. You can now ask questions about this document!
                 </div>`;
