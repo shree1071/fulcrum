@@ -260,6 +260,35 @@
             margin-top: 10px;
             border-radius: 8px;
         }
+        
+        .action-button.listening {
+            color: #4f46e5;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .voice-status {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #343a46;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            color: #e0e0e0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .voice-status.active {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -304,6 +333,14 @@
         <div class="prompt-area">
             <input type="text" id="prompt" placeholder="Ask anything">
             <div class="action-buttons">
+                <button class="action-button" id="voiceInput">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/>
+                        <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </button>
                 <button class="action-button" id="pdfUpload">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2v6m0 0l-4-4m4 4l4-4"/>
