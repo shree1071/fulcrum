@@ -932,4 +932,84 @@ ${content}
             handlePDFUpload(file);
         }
     });
+
+    // Add voice recognition functionality
+    const voiceButton = document.getElementById("voiceInput");
+    let recognition = null;
+    let isListening = false;
+
+    function setupVoiceRecognition() {
+        if (!('webkitSpeechRecognition' in window)) {
+            voiceButton.style.display = 'none';
+            return;
+        }
+
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US'; // Default language
+
+        recognition.onstart = () => {
+            isListening = true;
+            voiceButton.classList.add('listening');
+            showVoiceStatus("Listening...");
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            promptInput.value = transcript;
+            submitBtn.click(); // Automatically submit the voice input
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            showVoiceStatus("Error! Try again");
+            stopListening();
+        };
+
+        recognition.onend = () => {
+            stopListening();
+        };
+    }
+
+    function showVoiceStatus(message) {
+        let status = document.querySelector('.voice-status');
+        if (!status) {
+            status = document.createElement('div');
+            status.className = 'voice-status';
+            voiceButton.parentElement.appendChild(status);
+        }
+        status.textContent = message;
+        status.classList.add('active');
+    }
+
+    function stopListening() {
+        isListening = false;
+        voiceButton.classList.remove('listening');
+        const status = document.querySelector('.voice-status');
+        if (status) status.classList.remove('active');
+    }
+
+    voiceButton.addEventListener('click', () => {
+        if (!recognition) setupVoiceRecognition();
+        
+        if (!isListening) {
+            recognition.start();
+        } else {
+            recognition.stop();
+        }
+    });
+
+    // Update language selector to also change voice recognition language
+    document.getElementById('language').addEventListener('change', (e) => {
+        if (recognition) {
+            switch(e.target.value) {
+                case 'hi': recognition.lang = 'hi-IN'; break;
+                case 'es': recognition.lang = 'es-ES'; break;
+                case 'fr': recognition.lang = 'fr-FR'; break;
+                case 'kn': recognition.lang = 'kn-IN'; break;
+                default: recognition.lang = 'en-US';
+            }
+        }
+    });
 });
