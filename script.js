@@ -11,26 +11,214 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize PDF.js worker
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+//pop questions
+const popq= {
+    "computer components": {
+        category: "Computer Basics",
+        description: "Define a computer and explain the important components of a computer system"
+    },
+    "input and output devices": {
+        category: "Computer Basics",
+        description: "Explain any two input and output devices in a computer"
+    },
+    "C programming features": {
+        category: "C Language Fundamentals",
+        description: "Describe the important features of the C programming language"
+    },
+    "C program structure": {
+        category: "C Language Fundamentals",
+        description: "Explain the basic structure of a C program with an example"
+    },
+    "identifiers in C": {
+        category: "C Language Fundamentals",
+        description: "Define an identifier, explain the rules for a valid identifier, and demonstrate variable declarations"
+    },
+    "constants in C": {
+        category: "C Language Fundamentals",
+        description: "Explain the two ways of defining constants in a C program"
+    },
+    "data types in C": {
+        category: "C Language Fundamentals",
+        description: "Define data types and explain different data types supported by C with examples"
+    },
+    "if-else statement": {
+        category: "Control Flow",
+        description: "Explain the if-else statement with a flowchart and example program"
+    },
+    "break vs continue": {
+        category: "Control Flow",
+        description: "Differentiate between break and continue statements in C"
+    },
+    "simple calculator program": {
+        category: "Programming Practice",
+        description: "Write a C program to implement a simple calculator"
+    },
+    "C program files": {
+        category: "C Language Fundamentals",
+        description: "List and explain different types of files used in a C program"
+    },
+    "C keywords": {
+        category: "C Language Fundamentals",
+        description: "List and explain any five keywords from C language"
+    },
+    "types of constants": {
+        category: "C Language Fundamentals",
+        description: "List different types of constants in C: Integer, floating, character, string"
+    },
+    "C operators": {
+        category: "Operators",
+        description: "List and explain operators in C: Arithmetic, relational, equality, logical, unary, conditional, bitwise, assignment, comma, sizeof"
+    },
+    "operator precedence": {
+        category: "Operators",
+        description: "Explain operator precedence and associativity"
+    },
+    "type conversion and casting": {
+        category: "Data Types",
+        description: "Explain type conversion and type casting in C"
+    },
+    "arithmetic operators": {
+        category: "Operators",
+        description: "Demonstrate the working of arithmetic operators in C"
+    },
+    "relational operators": {
+        category: "Operators",
+        description: "Demonstrate the working of relational operators in C"
+    },
+    "logical operators": {
+        category: "Operators",
+        description: "Demonstrate the working of logical operators in C"
+    },
+    "assignment operators": {
+        category: "Operators",
+        description: "Demonstrate the working of assignment operators in C"
+    },
+    "increment and decrement operators": {
+        category: "Operators",
+        description: "Demonstrate the working of increment/decrement operators in C"
+    },
+    "ternary operator": {
+        category: "Operators",
+        description: "Demonstrate the working of the ternary operator in C"
+    },
+    "bitwise operators": {
+        category: "Operators",
+        description: "Demonstrate the working of bitwise operators in C"
+    },
+    "sizeof operator": {
+        category: "Operators",
+        description: "Demonstrate the working of sizeof() operator in C"
+    },
+    "sum of two numbers": {
+        category: "Programming Practice",
+        description: "Write a C program to find the sum of two numbers"
+    },
+    "area of a rectangle": {
+        category: "Programming Practice",
+        description: "Write a C program to find the area of a rectangle"
+    },
+    "simple interest program": {
+        category: "Programming Practice",
+        description: "Write a C program to find Simple Interest"
+    },
+    "swap two numbers": {
+        category: "Programming Practice",
+        description: "Write a C program to swap two numbers"
+    },
+    "swap numbers without third variable": {
+        category: "Programming Practice",
+        description: "Write a C program to swap two numbers without using a third variable"
+    },
+    "voting eligibility": {
+        category: "Control Flow",
+        description: "Write a C program to check voting eligibility using simple if/if-else"
+    },
+    "positive or negative number": {
+        category: "Control Flow",
+        description: "Write a C program to check if a number is positive or negative using simple if/if-else"
+    },
+    "odd or even check": {
+        category: "Control Flow",
+        description: "Write a C program to check if a number is odd or even using simple if/if-else"
+    },
+    "largest of 2 numbers": {
+        category: "Control Flow",
+        description: "Write a C program to find the largest of two numbers using simple if/if-else"
+    },
+    "largest of 3 numbers": {
+        category: "Control Flow",
+        description: "Write a C program to find the largest of three numbers using simple if/if-else"
+    },
+    "largest of 3 numbers nested if": {
+        category: "Control Flow",
+        description: "Write a C program to find the largest of three numbers using nested if statements"
+    },
+    "calculator using switch": {
+        category: "Control Flow",
+        description: "Write a C program to simulate a calculator using switch statement"
+    },
+    "electricity bill program": {
+        category: "Programming Practice",
+        description: "Write a C program to calculate electricity charges based on unit consumption"
+    },
+    "transport ticket pricing": {
+        category: "Programming Practice",
+        description: "Write a C program to calculate ticket price based on age and luggage weight"
+    },
+    "quadratic equation roots": {
+        category: "Mathematics",
+        description: "Write a C program to compute the roots of a quadratic equation"
+    },
+    "sum of natural numbers": {
+        category: "Loops",
+        description: "Write a C program to find the sum of first n natural numbers using while loop"
+    },
+    "factorial using while": {
+        category: "Loops",
+        description: "Write a C program to find the factorial of a number using while loop"
+    },
+    "sum of series": {
+        category: "Loops",
+        description: "Write a C program to compute the sum of series 1 + X + X^2 + ... + X^n using while loop"
+    },
+    "reverse number and palindrome": {
+        category: "Loops",
+        description: "Write a C program to reverse a number and check if it is a palindrome"
+    },
+    "GCD and LCM using Euclid's algorithm": {
+        category: "Mathematics",
+        description: "Write a C program to compute the GCD and LCM of two numbers using Euclid's algorithm"
+    },
+    "square root program": {
+        category: "Mathematics",
+        description: "Write a C program to find the square root of a number using while loop"
+    },
+    "prime number check": {
+        category: "Loops",
+        description: "Write a C program to check if a number is prime using for loop"
+    },
+    "fibonacci series": {
+        category: "Loops",
+        description: "Write a C program to print the Fibonacci series using for loop"
+    },
+    "functions in C": {
+        category: "Functions",
+        description: "Write C programs demonstrating all four categories of functions"
+    },
+    "prime number using functions": {
+        category: "Functions",
+        description: "Write a C program using functions to check if a number is prime"
+    },
+    "pattern printing": {
+        category: "Loops",
+        description: "Write C programs to print various patterns using loops"
+    },
+    "break, continue, goto": {
+        category: "Control Flow",
+        description: "Demonstrate break, continue, and goto statements with an example program"
+    }
+};
 
-    // Combine lab programs, locations, and calendar events
-    const labPrograms = {
-        "quadratic equation": { category: "Mathematics", description: "Compute the roots of a quadratic equation by accepting the coefficients. Print appropriate messages." },
-        "electricity bill": { category: "Utility", description: "An electricity board charges different rates based on unit consumption. Compute and display the charges accordingly." },
-        "pattern": { category: "Pattern Generation", description: "Generate a pyramid pattern using numbers based on user input for the number of rows." },
-        "binary search": { category: "Searching Algorithm", description: "Implement Binary Search on integers." },
-        "matrix multiplication": { category: "Matrix Operations", description: "Implement matrix multiplication and validate the rules of multiplication." },
-        "taylor series": { category: "Mathematics", description: "Compute sin(x)/cos(x) using the Taylor series approximation and compare results with the built-in library function." },
-        "bubble sort": { category: "Sorting Algorithm", description: "Sort a given set of numbers using the Bubble Sort algorithm." },
-        "string operations": { category: "String Manipulation", description: "Implement string operations such as compare, concatenate, and find string length using functions." },
-        "student marks": { category: "Data Structures", description: "Use structures to read, write, compute average marks, and list students scoring above and below average." },
-        "pointers statistics": { category: "Pointers", description: "Use pointers to compute the sum, mean, and standard deviation of a set of numbers." },
-        "fibonacci series": { category: "Recursion", description: "Generate the Fibonacci series up to a given number using recursion." },
-        "palindrome check": { category: "String Manipulation", description: "Check if a given string or number is a palindrome." },
-        "prime number": { category: "Mathematics", description: "Determine whether a given number is prime." },
-        "armstrong number": { category: "Mathematics", description: "Check if a given number is an Armstrong number." },
-        "factorial": { category: "Recursion", description: "Compute the factorial of a number using recursion." },
-        "reverse array": { category: "Array Manipulation", description: "Reverse the elements of an array." }
-    };
 
     const locations = {
         "cse 15 506": "CSE Lab 15 is located in Block 5, 6th Floor. Take the main elevator to the 6th floor, turn right and walk to the end of the hallway.",
@@ -39,8 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "aiml 5": "AIML Lab 5 is located in BSN CR 505 (Block 5, 5th Floor). Take the elevator to the 5th floor, turn right and it's the first lab you'll see.",
         "bsn cr 503": "Room BSN CR 503 is on the 3rd floor of Block 5. This is AIML Lab 1.",
         "bsn cr 504": "Room BSN CR 504 is on the 4th floor of Block 5. This is AIML Lab 2.",
-        "bsn cr 505": "Room BSN CR 505 is on the 5th floor of Block 5. This is AIML Lab 5."
+        "bsn cr 505": "Room BSN CR 505 is on the 5th floor of Block 5. This is AIML Lab 5.",
+        "cse 1": "Room BSN CR 505 is on the 6th floor of Block 5. This is CSE Lab 15.",
     };
+    
 
     const calendarEvents = [
         { date: "13-14 Mar", event: "Course Registration for II Semester" },
@@ -210,6 +400,52 @@ types, operators, and control & Looping structures.
 ● Apply C programming skills to real-world problems and projects`,
             fileName: "C Programming.pdf",
             isLoaded: true
+        },
+        pythonImportantQuestions: {
+            text: `Python Programming Important Questions and Answers
+Unit 1: Introduction to Python
+----------
+Q1. What are the key features of Python?
+A: • Easy to learn and read
+   • Interpreted language
+   • Dynamically typed
+   • Object-oriented
+   • Large standard library
+   • Platform independent
+
+Q2. Explain Python's memory management
+A: Python uses automatic memory management with:
+   • Garbage collection
+   • Reference counting
+   • Memory pooling
+
+// ADD MORE QUESTIONS HERE
+// Format:
+// Q<number>. <question>
+// A: <detailed answer>
+// 
+// Organize by units/topics
+// Include code examples where relevant
+// Add multiple choice questions if needed
+// Add programming problems with solutions
+
+Unit 2: Control Structures
+----------
+// ADD QUESTIONS HERE
+
+Unit 3: Functions and Modules
+----------
+// ADD QUESTIONS HERE
+
+Unit 4: Object-Oriented Programming
+----------
+// ADD QUESTIONS HERE
+
+Unit 5: File Handling and Exception Handling
+----------
+// ADD QUESTIONS HERE`,
+            fileName: "Python Important Questions.pdf",
+            isLoaded: true
         }
     };
 
@@ -222,17 +458,66 @@ types, operators, and control & Looping structures.
     function getLabProgramResponse(userText) {
         userText = userText.toLowerCase().trim();
     
-        if (userText.includes("pop lab program") || userText.includes("lab programs")) {
+        if (userText.includes("pop lab program") || userText.includes("lab programs pop")) {
             return "Here are the available lab programs:<br>" +
                 Object.keys(labPrograms)
                     .map(key => `- <b>${key}</b> (${labPrograms[key].category}): ${labPrograms[key].description}`)
                     .join("<br>");
+                    
         }
-    
+        if (userText.includes("pop important questions") || userText.includes("pop imp")) {
+            return "Here are the questions:<br>" +
+                Object.keys(popq)
+                    .map(key => `- <b>${key}</b> (${popq[key].category}): ${popq[key].description}`)
+                    .join("<br>");
+                    
+        }
+        if (userText.includes("abcd") || userText.includes("python questions")) {
+            return "Here are the available questions:<br>" +
+                Object.keys(pythonq2)
+                    .map(key => `- <b>${key}</b> (${pythonq2[key].category}): ${pythonq2[key].description}`)
+                    .join("<br>");
+        }
+        if (userText.includes("python lab program") || userText.includes("lab programs python")) {
+            return "Here are the available lab programs:<br>" +
+                Object.keys(lab2)
+                    .map(key => `- <b>${key}</b> (${lab2[key].category}): ${lab2[key].description}`)
+                    .join("<br>");
+        }
+        if (userText.includes("python important questions") || userText.includes("important python questions")) {
+            return "Here are the important questions:<br>" +
+                Object.keys(pythonq)
+                    .map(key => `- <b>${key}</b> (${pythonq[key].category}): ${pythonq[key].description}`)
+                    .join("<br>");
+        }
         for (let key in labPrograms) {
             let keywords = key.split(" ");
             if (keywords.some(word => userText.includes(word))) {
                 return `📘 <b>${labPrograms[key].category}</b>: ${labPrograms[key].description}`;
+            }
+        }
+        for (let key in popq) {
+            let keywords = key.split(" ");
+            if (keywords.some(word => userText.includes(word))) {
+                return `📘 <b>${popq[key].category}</b>: ${popq[key].description}`;
+            }
+        }
+        for (let key in pythonq2) {
+            let keywords = key.split(" ");
+            if (keywords.some(word => userText.includes(word))) {
+                return `📘 <b>${pythonq2[key].category}</b>: ${pythonq2[key].description}`;
+            }
+        }
+        for (let key in pythonq) {
+            let keywords = key.split(" ");
+            if (keywords.some(word => userText.includes(word))) {
+                return `📘 <b>${pythonq[key].category}</b>: ${pythonq[key].description}`;
+            }
+        }
+        for (let key in lab2) {
+            let keywords = key.split(" ");
+            if (keywords.some(word => userText.includes(word))) {
+                return `📘 <b>${lab2[key].category}</b>: ${lab2[key].description}`;
             }
         }
     
@@ -325,6 +610,33 @@ types, operators, and control & Looping structures.
         return { rolePrefix, persona };
     }
 
+    // Update the PDF query handler section in your generateResponse function
+    const pdfQueryHandlers = [
+        {
+            pdfs: [pdfContents.pythonImportantQuestions],
+            keywords: ["python important", "python questions", "python exam", "python practice"],
+            handler: (userText) => {
+                const content = pdfContents.pythonImportantQuestions.text;
+                const converter = new showdown.Converter({
+                    tables: true,
+                    strikethrough: true,
+                    tasklists: true,
+                    emoji: true
+                });
+
+                // Format the response with markdown
+                let response = `# Python Important Questions
+
+${content}
+
+> Note: Study these questions thoroughly for your exam preparation.`;
+
+                return converter.makeHtml(response);
+            }
+        }
+    ];
+
+    // Update the generateResponse function to use the handler
     async function generateResponse(aiChatBox) {
         let textElement = aiChatBox.querySelector(".ai-chat-area");
         let { rolePrefix, persona } = getRolePersona(userMessage.text);
@@ -339,6 +651,19 @@ types, operators, and control & Looping structures.
         // Check if this is a lab program query first
         if (userMessage.text.toLowerCase().includes("lab program") || 
             userMessage.text.toLowerCase().includes("pop lab")) {
+            const labResponse = getLabProgramResponse(userMessage.text);
+            textElement.innerHTML = labResponse;
+            return;
+        }
+        //check for python questions
+        if (userMessage.text.toLowerCase().includes("python questions") || 
+            userMessage.text.toLowerCase().includes("python important")) {
+            const labResponse = getLabProgramResponse(userMessage.text);
+            textElement.innerHTML = labResponse;
+            return;
+        }
+        if (userMessage.text.toLowerCase().includes("pop important ") || 
+            userMessage.text.toLowerCase().includes("pop questions")) {
             const labResponse = getLabProgramResponse(userMessage.text);
             textElement.innerHTML = labResponse;
             return;
@@ -371,6 +696,16 @@ types, operators, and control & Looping structures.
                 pdfs: [pdfContents.cProgramming],
                 keywords: ["c programming", "syntax", "algorithms", "control structures"],
                 message: "Based on the C Programming course document"
+            },
+            {
+                pdfs: [pdfContents.pythonImportantQuestions],
+                keywords: ["python important", "python questions", "python exam", "python practice"],
+                message: "Based on the Python Important Questions document"
+            },
+            {
+                pdfs: [pdfContents.pythonImportantQuestions],
+                keywords: ["python questions", "python important", "python exam", "python practice", "python mcq", "python test"],
+                message: "Here are the Python Important Questions and Answers:\n\n"
             }
         ];
 
