@@ -449,6 +449,62 @@ Unit 5: File Handling and Exception Handling
         }
     };
 
+    // PDF Processing Functions
+    const pdfTools = {
+        // Summarize PDF content
+        summarize: (text) => {
+            const sentences = text.split('. ');
+            const keywords = ['important', 'key', 'main', 'objective', 'summary', 'conclusion'];
+            const keyPoints = sentences.filter(sentence => 
+                keywords.some(keyword => sentence.toLowerCase().includes(keyword))
+            );
+            
+            return keyPoints.length > 0 
+                ? keyPoints.slice(0, 5).join('. ') 
+                : sentences.slice(0, 5).join('. ');
+        },
+
+        // Generate questions from content
+        generateQuestions: (text) => {
+            const sections = text.split('\n').filter(line => line.trim().length > 10);
+            const questionTypes = [
+                { prefix: "What is", weight: 2 },
+                { prefix: "Explain", weight: 2 },
+                { prefix: "Describe", weight: 2 },
+                { prefix: "How does", weight: 1.5 },
+                { prefix: "Compare", weight: 1 }
+            ];
+
+            return sections.slice(0, 10).map(section => {
+                const type = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+                return `${type.prefix} ${section.trim().split('.')[0]}?`;
+            });
+        },
+
+        // Generate MCQs
+        generateMCQs: (text) => {
+            const sections = text.split('\n').filter(line => line.trim().length > 20);
+            const mcqs = [];
+
+            for (let i = 0; i < Math.min(sections.length, 5); i++) {
+                const section = sections[i];
+                const question = section.split('.')[0] + '?';
+
+                mcqs.push({
+                    question,
+                    options: [
+                        { text: "Option A", isCorrect: true },
+                        { text: "Option B", isCorrect: false },
+                        { text: "Option C", isCorrect: false },
+                        { text: "Option D", isCorrect: false }
+                    ]
+                });
+            }
+
+            return mcqs;
+        }
+    };
+
     let userMessage = {
         text: null,
         image: null,
@@ -838,13 +894,21 @@ ${content}
                 };
             }
             
-            // Display uploaded file
-            displayUploadedPDF(file.name);
+            // Generate initial analysis
+            const summary = pdfTools.summarize(fullText);
+            const questions = pdfTools.generateQuestions(fullText).slice(0, 3);
             
-            // Add notification to chat
+            // Display comprehensive upload summary
             let aiHtml = `
                 <div class="ai-chat-area">
-                    📄 <b>PDF uploaded:</b> "${file.name}" has been successfully loaded. You can now ask questions about this document!
+                    📄 <b>PDF uploaded:</b> "${file.name}"<br><br>
+                    <b>Quick Summary:</b><br>${summary}<br><br>
+                    <b>Sample Questions:</b><br>
+                    ${questions.map((q, i) => `${i + 1}. ${q}`).join('<br>')}<br><br>
+                    <i>Try these commands:</i><br>
+                    • "Summarize PDF"<br>
+                    • "Generate questions"<br>
+                    • "Create MCQ practice paper"
                 </div>`;
             let aiChatBox = createChatBox(aiHtml, "ai-chat-box");
             chatContainer.appendChild(aiChatBox);
@@ -889,6 +953,14 @@ ${content}
 
             uploadedPDFs.innerHTML = "";
         });
+    }
+
+    // Function to summarize PDF content
+    function summarizePDFContent(pdfText) {
+        const sentences = pdfText.split('. ');
+        const summaryLength = Math.min(5, sentences.length); // Limit summary to 5 sentences
+        const summary = sentences.slice(0, summaryLength).join('. ') + '.';
+        return `📄 <b>Summary:</b><br>${summary}`;
     }
 
     // Event listeners
