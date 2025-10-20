@@ -274,6 +274,7 @@ const popq= {
         "es": "Spanish", 
         "fr": "French",
         "kn": "Kannada"
+
     };
 
     // PDF contents for multiple documents
@@ -669,26 +670,29 @@ Unit 5: File Handling and Exception Handling
     // Update the PDF query handler section in your generateResponse function
     const pdfQueryHandlers = [
         {
+            pdfs: [pdfContents.cloudComputing],
+            keywords: ["cloud computing", "cloud", "delivery models", "infrastructure"],
+            message: "Based on the Cloud Computing course document"
+        },
+        {
+            pdfs: [pdfContents.pythonProgramming],
+            keywords: ["python", "programming", "object oriented", "modular"],
+            message: "Based on the Python Programming course document"
+        },
+        {
+            pdfs: [pdfContents.cProgramming],
+            keywords: ["c programming", "syntax", "algorithms", "control structures"],
+            message: "Based on the C Programming course document"
+        },
+        {
             pdfs: [pdfContents.pythonImportantQuestions],
             keywords: ["python important", "python questions", "python exam", "python practice"],
-            handler: (userText) => {
-                const content = pdfContents.pythonImportantQuestions.text;
-                const converter = new showdown.Converter({
-                    tables: true,
-                    strikethrough: true,
-                    tasklists: true,
-                    emoji: true
-                });
-
-                // Format the response with markdown
-                let response = `# Python Important Questions
-
-${content}
-
-> Note: Study these questions thoroughly for your exam preparation.`;
-
-                return converter.makeHtml(response);
-            }
+            message: "Based on the Python Important Questions document"
+        },
+        {
+            pdfs: [pdfContents.pythonImportantQuestions],
+            keywords: ["python questions", "python important", "python exam", "python practice", "python mcq", "python test"],
+            message: "Here are the Python Important Questions and Answers:\n\n"
         }
     ];
 
@@ -704,28 +708,15 @@ ${content}
             return;
         }
         
-        // Check if this is a lab program query first
+        // Check lab programs
         if (userMessage.text.toLowerCase().includes("lab program") || 
             userMessage.text.toLowerCase().includes("pop lab")) {
             const labResponse = getLabProgramResponse(userMessage.text);
             textElement.innerHTML = labResponse;
             return;
         }
-        //check for python questions
-        if (userMessage.text.toLowerCase().includes("python questions") || 
-            userMessage.text.toLowerCase().includes("python important")) {
-            const labResponse = getLabProgramResponse(userMessage.text);
-            textElement.innerHTML = labResponse;
-            return;
-        }
-        if (userMessage.text.toLowerCase().includes("pop important ") || 
-            userMessage.text.toLowerCase().includes("pop questions")) {
-            const labResponse = getLabProgramResponse(userMessage.text);
-            textElement.innerHTML = labResponse;
-            return;
-        }
         
-        // Check if this is a location query
+        // Check location
         const locationResponse = getLocationResponse(userMessage.text);
         if (locationResponse) {
             textElement.innerHTML = locationResponse;
@@ -737,85 +728,79 @@ ${content}
         const langName = languages[selectedLang] || "English";
         
         // Check PDF-specific queries
-        const pdfQueryHandlers = [
-            {
-                pdfs: [pdfContents.cloudComputing],
-                keywords: ["cloud computing", "cloud", "delivery models", "infrastructure"],
-                message: "Based on the Cloud Computing course document"
-            },
-            {
-                pdfs: [pdfContents.pythonProgramming],
-                keywords: ["python", "programming", "object oriented", "modular"],
-                message: "Based on the Python Programming course document"
-            },
-            {
-                pdfs: [pdfContents.cProgramming],
-                keywords: ["c programming", "syntax", "algorithms", "control structures"],
-                message: "Based on the C Programming course document"
-            },
-            {
-                pdfs: [pdfContents.pythonImportantQuestions],
-                keywords: ["python important", "python questions", "python exam", "python practice"],
-                message: "Based on the Python Important Questions document"
-            },
-            {
-                pdfs: [pdfContents.pythonImportantQuestions],
-                keywords: ["python questions", "python important", "python exam", "python practice", "python mcq", "python test"],
-                message: "Here are the Python Important Questions and Answers:\n\n"
-            }
-        ];
-
-        // Check if query matches any PDF's context
         const matchedPDFHandler = pdfQueryHandlers.find(handler => 
             handler.keywords.some(keyword => 
                 userMessage.text.toLowerCase().includes(keyword)
             )
         );
 
+        let finalPrompt = userMessage.text;
         if (matchedPDFHandler) {
-            // Add PDF context to the prompt
-            userMessage.text = `${matchedPDFHandler.message}, ${userMessage.text}\n\nPDF CONTENT:\n${matchedPDFHandler.pdfs[0].text.substring(0, 15000)}`;
+            finalPrompt = `${matchedPDFHandler.message}, ${userMessage.text}\n\nPDF CONTENT:\n${matchedPDFHandler.pdfs[0].text.substring(0, 15000)}`;
         }
         
-        // Add language instruction to the prompt
-        const languageInstruction = `Please respond in ${langName} language: `;
+        // Add language instruction
+        const languageInstruction = `Please respond in ${langName} language. `;
+        finalPrompt = languageInstruction + rolePrefix + finalPrompt;
         
+        // Build request body
         let requestBody = {
-            contents: [{ 
-                parts: [{ 
-                    text: languageInstruction + rolePrefix + userMessage.text 
-                }] 
-            }],
+            contents: [{
+                parts: [
+                    { text: finalPrompt }
+                ]
+            }]
         };
 
+        // Add image if present
         if (userMessage.image) {
-            requestBody.contents[0].parts.push({ inline_data: userMessage.image });
+            requestBody.contents[0].parts.push({
+                inline_data: {
+                    mime_type: userMessage.image.mime_type,
+                    data: userMessage.image.data
+                }
+            });
         }
 
         try {
-            let response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyD62vTZtAlmumzqslwBYgrbzWW5WrE1k58", {
+            let response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestBody),
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-goog-api-key": "AIzaSyBRImoE5KncsxRC_y04yPieM3euZLCXXv8"
+                },
+                body: JSON.stringify(requestBody)
             });
 
-            let data = await response.json();
-            let apiResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "No response received.";
-
-            // Introduce as BMSIT Assistant if user asks "Who are you?"
-            if (/who\s*are\s*you/i.test(userMessage.text)) {
-                apiResponse = `I am the **BMSIT Assistant**! ${persona}`;
-            } else {
-                apiResponse = `${persona}\n\n${apiResponse.replace(/\n/g, "<br>")}`;
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("API Error Response:", errorText);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            textElement.innerHTML = apiResponse;
+            const data = await response.json();
+            console.log("API Response:", data);
+
+            // Extract the response text
+            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                const responseText = data.candidates[0].content.parts[0].text;
+                textElement.innerHTML = marked.parse(responseText);
+            } else {
+                throw new Error("Unexpected API response structure");
+            }
+
         } catch (error) {
-            console.error("API Fetch Error:", error);
-            textElement.innerHTML = "⚠️ Error retrieving response. Please try again later.";
+            console.error("API Error:", error);
+            textElement.innerHTML = `❌ <b>Error:</b> ${error.message}<br><br>
+                <b>Troubleshooting:</b><br>
+                • Check if API key is valid<br>
+                • Verify internet connection<br>
+                • Check browser console for details<br>
+                • Ensure API quota is not exceeded`;
         } finally {
-            chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: "smooth" });
-            resetImageUpload();
+            aiChatBox.classList.remove('loading');
+            // Reset image after sending
+            userMessage.image = null;
         }
     }
 
@@ -1072,7 +1057,11 @@ ${content}
         }
     });
 
-    // Update language selector to also change voice recognition language
+    // Update language selector to also change voice 
+    // recognition language
+
+
+    
     document.getElementById('language').addEventListener('change', (e) => {
         if (recognition) {
             switch(e.target.value) {
